@@ -82,4 +82,28 @@ EC2インスタンスのログイン情報を公開鍵で暗号化して、こ�
 ログインに必要なのは手元の秘密鍵一つだけでOK
 公開鍵はAWSが保管して、管理している。
 LinuxタイプのEC2へログインする場合、sshコマンドを引数に秘密鍵を指定してログインする。
-  
+
+・ログイン方法
+ssh -i 秘密鍵 ec2-user@IPアドレス
+
+秘密鍵を失った場合でも、再作成ができるので慌てない.
+方法はAMIとしてバックアップを取得し、起動し直す際に新たなキーペアを作成するというもの。
+https://www.youtube.com/redirect?v=1MMXigDxTdc&event=video_description&q=https%3A%2F%2Faws.amazon.com%2Fjp%2Fpremiumsupport%2Fknowledge-center%2Frecover-access-lost-key-pair%2F%3Fnc1%3Dh_ls&redir_token=F-JuSgQ3iomlgg4KYZMo8mCg_VJ8MTU4ODMyODc2MEAxNTg4MjQyMzYw
+
+◯インスタンスメタデータ
+ruby/python/bashなどのプログラムの作成時に、
+EC2インスタンス自身のIPアドレスや所属しているサブネットなどの情報を
+直接書いてはいませんか？これではプログラムを使いまわせないので、効率的な方法を取りたい
+
+EC2インスタンスには自身の情報が埋め込まれており、
+EC2が起動中の場合、このようなCurlコマンドで自身の情報を取得できる
+curl http://IPアドレス/latest/meta-data/
+これを実行して出力したものから対象を絞って情報を見ていく。
+ここでは個別にインスタンスメタデータで検索してみる。
+例えば、使用しているAMIのIDやローカルのIPアドレス、所属しているサブネットIDなどが取得できる。
+
+githubで一覧情報を出すScriptは以下から
+https://www.youtube.com/redirect?v=1MMXigDxTdc&event=video_description&q=https%3A%2F%2Fgithub.com%2Fboredwookie%2Fec2-metadata-extractor&redir_token=F-JuSgQ3iomlgg4KYZMo8mCg_VJ8MTU4ODMyODc2MEAxNTg4MjQyMzYw
+このシェルをコピーして、chmodで実行権を与えて実行すると、インスタンスメタデータの一覧が確認できる
+コマンド「ec2-metadata」でも同様のことができる。
+
